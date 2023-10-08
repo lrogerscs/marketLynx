@@ -1,0 +1,1 @@
+moduleSearchIndex = [{"l":"com.lrogerscs.marketlynx"}];updateSearchResults();

@@ -1,0 +1,130 @@
+@font-face {
+    font-family: "Hammersmith One";
+    src: url("../font/HammersmithOne-Regular.ttf");
+}
+
+.base {
+    -fx-background-color: linear-gradient(to top left, #23235c 0%, #151537 30%, #151537 70%, #23235c 100%);
+}
+
+.window {
+    -fx-border-width: 1.5;
+    -fx-border-color: linear-gradient(to top, #7553c6, #a38cd9);
+    -fx-border-radius: 10;
+    -fx-background-color: linear-gradient(to top, #1c1c4a 0%, #151537 15%, #151537 85%, #1c1c4a 100%);
+    -fx-background-radius: 10;
+}
+
+.text-field {
+    -fx-font-family: "Hammersmith One";
+    -fx-font-size: 12;
+    -fx-text-fill: #f9f5fc;
+    -fx-background-color: transparent;
+    -fx-border-width: 1.5;
+    -fx-border-color: linear-gradient(to top, #d1c6ec, #f9f5fc);
+    -fx-border-radius: 10;
+}
+
+.combo-box {
+    -fx-font-family: "Hammersmith One";
+    -fx-font-size: 12;
+    -fx-text-fill: #f9f5fc;
+    -fx-background-color: transparent;
+    -fx-border-width: 1.5;
+    -fx-border-color: linear-gradient(to top, #d1c6ec, #f9f5fc);
+    -fx-border-radius: 10;
+}
+
+.combo-box .arrow {
+    -fx-background-color: linear-gradient(to top, #d1c6ec, #f9f5fc);
+}
+
+.combo-box .list-cell {
+    -fx-font-family: "Hammersmith One";
+    -fx-font-size: 12;
+    -fx-text-fill: #f9f5fc;
+    -fx-background-color: transparent;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: #f9f5fc;
+    -fx-background-radius: 10;
+}
+
+.combo-box-popup .list-view .list-cell {
+    -fx-font-family: "Hammersmith One";
+    -fx-font-size: 12;
+    -fx-text-fill: #0a0613;
+    -fx-background-color: transparent;
+}
+
+.combo-box-popup .list-view .list-cell:filled:hover {
+    -fx-font-family: "Hammersmith One";
+    -fx-font-size: 12;
+    -fx-text-fill: #f9f5fc;
+    -fx-background-color: #7553c6;
+    -fx-background-radius: 10;
+}
+
+.button {
+    -fx-font-family: "Hammersmith One";
+    -fx-font-size: 12;
+    -fx-background-color: linear-gradient(to top, #d1c6ec, #f9f5fc);
+    -fx-background-radius: 10;
+    -fx-text-fill: #0a0613;
+}
+
+.button:pressed {
+    -fx-font-family: "Hammersmith One";
+    -fx-font-size: 12;
+    -fx-background-color: #29194d;
+    -fx-background-radius: 10;
+    -fx-text-fill: #f9f5fc;
+}
+
+.label {
+    -fx-font-family: "Hammersmith One";
+    -fx-font-size: 12;
+    -fx-text-fill: #f9f5fc;
+}
+
+.name-bar {
+    -fx-font-family: "Hammersmith One";
+    -fx-font-size: 24;
+    -fx-text-fill: linear-gradient(to top, #d1c6ec, #f9f5fc);
+}
+
+.radio-button {
+    -fx-font-family: "Hammersmith One";
+    -fx-font-size: 12;
+    -fx-text-fill: #f9f5fc;
+}
+
+.radio-button .radio {
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-border-color: linear-gradient(to top, #d1c6ec, #f9f5fc);
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.radio-button:selected .dot {
+    -fx-background-color: linear-gradient(to top, #d1c6ec, #f9f5fc);
+    -fx-background-insets: 0;
+}
+
+.toggle-button {
+    -fx-font-family: "Hammersmith One";
+    -fx-font-size: 13;
+    -fx-background-color: transparent;
+    -fx-background-radius: 5;
+    -fx-text-fill: #f9f5fc;
+}
+
+.toggle-button:selected {
+    -fx-font-family: "Hammersmith One";
+    -fx-font-size: 13;
+    -fx-background-color: linear-gradient(to top, #93a9ec 0%, #5275e0 10%, transparent 50%, transparent 100%);
+    -fx-background-radius: 5;
+    -fx-text-fill: #f9f5fc;
+}

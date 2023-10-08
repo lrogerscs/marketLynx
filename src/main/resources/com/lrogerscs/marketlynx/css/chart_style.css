@@ -1,0 +1,92 @@
+@font-face {
+    font-family: "Hammersmith One";
+    src: url("../font/HammersmithOne-Regular.ttf");
+}
+
+.label {
+    -fx-font-family: "Hammersmith One";
+    -fx-font-size: 12;
+    -fx-alignment: center-left;
+    -fx-text-fill: #f9f5fc;
+    -fx-pref-width: 150;
+    -fx-max-width: 300;
+}
+
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.chart-horizontal-zero-line{
+    -fx-stroke: transparent;
+}
+
+.chart-vertical-zero-line{
+    -fx-stroke: transparent;
+}
+
+.chart-horizontal-grid-lines {
+    -fx-stroke: transparent;
+}
+
+.chart-vertical-grid-lines {
+    -fx-stroke: transparent;
+}
+
+.axis {
+    -fx-tick-label-font-family: "Hammersmith One";
+    -fx-tick-label-font-size: 10;
+    -fx-tick-label-fill: #f9f5fc;
+}
+
+.axis:right {
+    -fx-border-color: transparent;
+}
+
+.axis:bottom {
+    -fx-border-color: transparent;
+}
+
+.axis-tick-mark {
+    -fx-stroke: transparent;
+}
+
+.axis-label {
+    -fx-font-family: "Hammersmith One";
+    -fx-font-size: 14;
+    -fx-alignment: center;
+    -fx-text-fill: #f9f5fc;
+}
+
+.line {
+    -fx-stroke: #f9f5fc;
+    -fx-stroke-width: 1;
+    -fx-stroke-dash-array: 4;
+}
+
+.default-color0.chart-symbol {
+    -fx-background-color: #3d99f5;
+    -fx-background-radius: 10;
+    -fx-padding: 3;
+}
+
+.cursor-tick-label {
+    -fx-font-family: "Hammersmith One";
+    -fx-font-size: 10;
+    -fx-text-fill: #0a0613;
+    -fx-background-color: radial-gradient(center 0% 50% , radius 100% , #d1c6ec, #f9f5fc);
+    -fx-background-radius: 2.5;
+    -fx-alignment: center;
+    -fx-max-width: 70;
+    -fx-padding: 2.5 2.5 2.5 2.5;
+    visibility: hidden;
+}
+
+.final-price-label {
+    -fx-font-family: "Hammersmith One";
+    -fx-font-size: 10;
+    -fx-text-fill: #0a0613;
+    -fx-background-radius: 2.5;
+    -fx-alignment: center;
+    -fx-max-width: 70;
+    -fx-padding: 2.5 2.5 2.5 2.5;
+}

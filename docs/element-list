@@ -1,0 +1,7 @@
+module:com.lrogerscs.marketlynx
+com.lrogerscs.marketlynx
+com.lrogerscs.marketlynx.controller
+com.lrogerscs.marketlynx.downloader
+com.lrogerscs.marketlynx.pane
+com.lrogerscs.marketlynx.reader
+com.lrogerscs.marketlynx.stock

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" prefHeight="900.0" prefWidth="1600.0" styleClass="base" stylesheets="@../css/app_style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lrogerscs.marketlynx.controller.MainController">
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </padding>
+   <HBox prefHeight="49.0" prefWidth="1580.0" spacing="10.0">
+      <padding>
+         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      </padding>
+      <children>
+         <ImageView fitHeight="50.0" fitWidth="50.0">
+            <image>
+               <Image url="@../image/marketLynxLogoColored.png" />
+            </image>
+         </ImageView>
+         <Label prefHeight="50.0" prefWidth="190.0" styleClass="name-bar" text="marketLynx">
+            <font>
+               <Font name="Hammersmith One Regular" size="46.0" />
+            </font>
+         </Label>
+      </children>
+   </HBox>
+   <HBox alignment="CENTER" prefHeight="906.0" prefWidth="1580.0" spacing="10.0">
+      <children>
+         <VBox prefHeight="926.0" prefWidth="1300.0">
+            <children>
+               <HBox prefHeight="27.0" prefWidth="200.0">
+                  <children>
+                     <ToggleButton fx:id="stockViewToggleButton" mnemonicParsing="false" onAction="#onStockChartClick" selected="true" text="Stock Chart">
+                        <toggleGroup>
+                           <ToggleGroup fx:id="toggleChartGroup" />
+                        </toggleGroup>
+                     </ToggleButton>
+                     <ToggleButton fx:id="correlationViewToggleButton" mnemonicParsing="false" onAction="#onCorrelationChartClick" text="Correlation Chart" toggleGroup="$toggleChartGroup" />
+                  </children>
+                  <VBox.margin>
+                     <Insets left="10.0" />
+                  </VBox.margin>
+               </HBox>
+               <VBox fx:id="pane" prefHeight="765.0" prefWidth="1300.0" spacing="10.0" styleClass="window">
+                  <padding>
+                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  </padding>
+               </VBox>
+            </children>
+         </VBox>
+         <VBox prefWidth="250.0" spacing="10.0">
+            <children>
+               <VBox prefHeight="88.0" prefWidth="300.0" spacing="10.0" styleClass="window" stylesheets="@../css/app_style.css">
+                  <children>
+                     <HBox prefHeight="34.0" prefWidth="269.0">
+                        <children>
+                           <TextField fx:id="tickerTextField" prefHeight="25.0" prefWidth="278.0" promptText="Stock Ticker" styleClass="text-field" />
+                        </children>
+                        <VBox.margin>
+                           <Insets />
+                        </VBox.margin>
+                        <padding>
+                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        </padding>
+                     </HBox>
+                     <HBox alignment="CENTER" prefHeight="34.0" prefWidth="269.0" spacing="5.0">
+                        <padding>
+                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        </padding>
+                        <children>
+                           <ComboBox fx:id="intervalComboBox" prefHeight="28.0" prefWidth="270.0">
+                              <cursor>
+                                 <Cursor fx:constant="HAND" />
+                              </cursor></ComboBox>
+                        </children>
+                     </HBox>
+                     <HBox alignment="CENTER" prefHeight="34.0" prefWidth="269.0" spacing="5.0">
+                        <padding>
+                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        </padding>
+                        <children>
+                           <Button mnemonicParsing="false" onAction="#onDownloadButtonClick" prefHeight="24.0" prefWidth="253.0" text="Download">
+                              <cursor>
+                                 <Cursor fx:constant="HAND" />
+                              </cursor></Button>
+                        </children>
+                     </HBox>
+                  </children>
+                  <padding>
+                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  </padding>
+               </VBox>
+               <HBox alignment="CENTER" prefHeight="40.0" prefWidth="279.0" spacing="10.0" styleClass="window" stylesheets="@../css/app_style.css">
+                  <padding>
+                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  </padding>
+                  <children>
+                     <RadioButton alignment="TOP_CENTER" mnemonicParsing="false" onAction="#onShowTrendLineClick" prefWidth="125.0" text="Show Trend">
+                        <toggleGroup>
+                           <ToggleGroup fx:id="toggleTrendLineGroup" />
+                        </toggleGroup>
+                     </RadioButton>
+                     <RadioButton alignment="TOP_CENTER" mnemonicParsing="false" onAction="#onHideTrendLineClick" prefWidth="125.0" selected="true" text="Hide Trend" toggleGroup="$toggleTrendLineGroup" />
+                  </children>
+               </HBox>
+               <HBox alignment="CENTER" prefHeight="40.0" prefWidth="279.0" spacing="10.0" styleClass="window" stylesheets="@../css/app_style.css">
+                  <padding>
+                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  </padding>
+                  <children>
+                     <RadioButton alignment="TOP_CENTER" mnemonicParsing="false" onAction="#onShowVolumeClick" prefWidth="125.0" text="Show Volume">
+                        <toggleGroup>
+                           <ToggleGroup fx:id="toggleVolumeGroup" />
+                        </toggleGroup>
+                     </RadioButton>
+                     <RadioButton alignment="TOP_CENTER" mnemonicParsing="false" onAction="#onHideVolumeClick" prefWidth="125.0" selected="true" text="Hide Volume" toggleGroup="$toggleVolumeGroup" />
+                  </children>
+               </HBox>
+            </children>
+            <HBox.margin>
+               <Insets />
+            </HBox.margin>
+            <padding>
+               <Insets top="26.0" />
+            </padding></VBox>
+      </children>
+      <padding>
+         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+      </padding>
+   </HBox>
+</VBox>
