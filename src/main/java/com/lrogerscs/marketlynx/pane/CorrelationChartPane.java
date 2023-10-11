@@ -100,6 +100,9 @@ public class CorrelationChartPane extends VBox {
      */
     public void setStock(String name, String interval, ArrayList[] stockData) {
         stock.setStock(name, interval, stockData);
+
+
+
         draw(100);
     }
 
@@ -131,7 +134,7 @@ public class CorrelationChartPane extends VBox {
         scatterChart.getData().clear();
         size = units;
 
-        // Build series of points.
+        // Build series of points and update maximums/minimums.
         for (int i = 1; i < size; i++) {
             series.getData().add(new XYChart.Data(stock.getClose(stock.size() - i), stock.getClose(stock.size() - 1 - i)));
 

@@ -2,11 +2,13 @@
 A stock market charting application using JavaFX elements.
 Developed using IntelliJ IDEA 2023.1 and version 21 of Java JDK, JavaFX, and Scene Builder.
 ### Software Purpose
-Provide a working interface for stock market analysis (average, correlation, volatility, percentage change, etc.).
+Provide a user-friendly, working interface for stock market analysis (average, correlation, volatility, percentage change, etc.).
 ### Development Notes
 This application uses Yahoo historical data to download stock data for personal use.
 ### Interface
 ![marketLynxInterface.png](src%2Fmain%2Fresources%2Fcom%2Flrogerscs%2Fmarketlynx%2Fimage%2FmarketLynxInterface.png)
+### Demo
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/IgMjMRjCAuk/0.jpg)](https://www.youtube.com/watch?v=IgMjMRjCAuk)
 ### User Interaction Guide
 The user may interact with the interface in several ways:
 - To download a new stock:

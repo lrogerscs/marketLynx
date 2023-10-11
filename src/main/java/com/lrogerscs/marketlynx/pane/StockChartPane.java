@@ -255,6 +255,10 @@ public class StockChartPane extends VBox {
     public void setStock(String name, String interval, ArrayList[] stockData) {
         stock.setStock(name, interval, stockData);
 
+        // Reset max/min.
+        max = Double.MIN_VALUE;
+        min = Double.MAX_VALUE;
+
         // Build new series of points.
         areaSeries.getData().clear();
         for(int i = 0; i < stock.size(); i++)

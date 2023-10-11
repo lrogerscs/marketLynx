@@ -53,7 +53,7 @@ public class MainController implements Initializable {
     protected void onDownloadButtonClick() {
         String ticker = tickerTextField.getText();
         long period1 = LocalDateTime.of(1970, 1, 1, 23, 59).toEpochSecond(ZoneOffset.UTC);
-        long period2 = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
+        long period2 = LocalDateTime.now().minusDays(1).toEpochSecond(ZoneOffset.UTC);
         String interval = convertInterval();
 
         stockFileDownloader.downloadFile("https://query1.finance.yahoo.com/v7/finance/download/" + ticker
