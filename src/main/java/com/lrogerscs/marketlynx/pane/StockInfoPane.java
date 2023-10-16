@@ -11,26 +11,18 @@ import javafx.scene.layout.HBox;
  * @author Lee Rogers
  */
 public class StockInfoPane extends HBox {
-    private Label start;
-    private Label end;
-    private Label average;
-    private Label max;
-    private Label min;
-    private Label volatility;
-    private Label change;
+    private Label start = new Label("Start: ");
+    private Label end = new Label("End: ");
+    private Label average = new Label("Average Price: ");
+    private Label max = new Label("Maximum Price: ");
+    private Label min = new Label(" Minimum Price: ");
+    private Label volatility = new Label("Volatility: ");
+    private Label change = new Label("Change: ");
 
     /**
      * Default constructor. Initializes variables.
      */
     public StockInfoPane() {
-        start = new Label("Start: ");
-        end = new Label("End: ");
-        average = new Label("Average Price: ");
-        max = new Label("Maximum Price: ");
-        min = new Label(" Minimum Price: ");
-        volatility = new Label("Volatility: ");
-        change = new Label("Change: ");
-
         setAlignment(Pos.CENTER);
         setPadding(new Insets(10, 10, 10, 10));
         setSpacing(10);

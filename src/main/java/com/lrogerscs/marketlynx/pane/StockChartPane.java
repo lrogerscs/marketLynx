@@ -1,13 +1,10 @@
 package com.lrogerscs.marketlynx.pane;
 
-import com.lrogerscs.marketlynx.*;
 import com.lrogerscs.marketlynx.stock.Stock;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.chart.*;
 import javafx.scene.input.MouseEvent;
@@ -23,161 +20,82 @@ import java.util.List;
  * @author Lee Rogers
  */
 public class StockChartPane extends VBox {
-    private CategoryAxis areaXAxis;
-    private NumberAxis areaYAxis;
-    private CategoryAxis barXAxis;
-    private NumberAxis barYAxis;
-    private AreaChart areaChart;
-    private StackedBarChart stackedBarChart;
-    private XYChart.Series areaSeries;
-    private XYChart.Series barSeries;
-    private XYChart.Series trendLineSeries;
-    private CursorInfoPane cursorInfoPane;
-    private StockInfoPane stockInfoPane;
-    private Stock stock;
-    private IntegerProperty size;
-    private double max;
-    private double min;
-    private boolean trendLineShown;
-    private boolean volumeShown;
+    private CategoryAxis areaXAxis = new CategoryAxis();
+    private NumberAxis areaYAxis = new NumberAxis();
+    private CategoryAxis barXAxis = new CategoryAxis();
+    private NumberAxis barYAxis = new NumberAxis();
+    private AreaChart areaChart = new AreaChart(areaXAxis, areaYAxis);
+    private StackedBarChart stackedBarChart = new StackedBarChart(barXAxis, barYAxis);
+    private XYChart.Series areaSeries = new XYChart.Series();
+    private XYChart.Series barSeries = new XYChart.Series();
+    private XYChart.Series trendLineSeries = new XYChart.Series();
+    private CursorInfoPane cursorInfoPane = new CursorInfoPane();
+    private StockInfoPane stockInfoPane = new StockInfoPane();
+    private ChartOverlayPane chartOverlayPane = new ChartOverlayPane();
+    private Stock stock = new Stock();
+    private IntegerProperty size = new SimpleIntegerProperty(0);
+    private double max = Double.MIN_VALUE;
+    private double min = Double.MAX_VALUE;
+    private boolean trendLineShown = false;
+    private boolean volumeShown = false;
 
     /**
      * Default constructor. Initializes variables and behavior.
      */
     public StockChartPane() {
-        areaXAxis = new CategoryAxis();
-        areaYAxis = new NumberAxis();
-        barXAxis = new CategoryAxis();
-        barYAxis = new NumberAxis();
-        areaChart = new AreaChart(areaXAxis, areaYAxis);
-        stackedBarChart = new StackedBarChart(barXAxis, barYAxis);
-        areaSeries = new XYChart.Series();
-        barSeries = new XYChart.Series();
-        trendLineSeries = new XYChart.Series();
-        cursorInfoPane = new CursorInfoPane();
-        stockInfoPane = new StockInfoPane();
-        stock = new Stock();
-        size = new SimpleIntegerProperty(0);
-        max = Double.MIN_VALUE;
-        min = Double.MAX_VALUE;
-        trendLineShown = false;
-        volumeShown = false;
-        Node plotArea = areaChart.lookup(".chart-plot-background");
-        ChartOverlayPane chartOverlayPane = new ChartOverlayPane();
         StackPane chartPane = new StackPane();
 
-        size.addListener((observableValue, number, t1) -> {
-            if (size.get() < 1)
-                return;
-
-            double xBuffer = plotArea.getLayoutX() * 1.5;
-            double yBuffer = plotArea.getLayoutY() * 1.5;
-            double price = stock.getClose(stock.size() - 1);
-            String labelColor;
-            String lineColor;
-            String circleColor;
-
-            if (stock.getClose(stock.size() - size.get()) < stock.getClose(stock.size() - 1)) {
-                labelColor = "-fx-background-color: radial-gradient(center 0% 50% , radius 100% , #55f67e, #9efab5)";
-                lineColor = "-fx-stroke: #9efab5";
-                circleColor = "-fx-fill: #55f67e";
-            } else if (stock.getClose(stock.size() - size.get()) > stock.getClose(stock.size() - 1)) {
-                labelColor = "-fx-background-color: radial-gradient(center 0% 50% , radius 100% , #e70d2e, #f43e59)";
-                lineColor = "-fx-stroke: #f43e59";
-                circleColor = "-fx-fill: #e70d2e";
-            } else {
-                labelColor = "-fx-background-color: radial-gradient(center 0% 50% , radius 100% , #808080, #a6a6a6)";
-                lineColor = "-fx-stroke: #a6a6a6";
-                circleColor = "-fx-fill: #808080";
-            }
-
-            chartOverlayPane.setEndLabel(String.format("%.2f", price), areaXAxis.getWidth() + xBuffer
-                    , areaYAxis.getDisplayPosition(price) + yBuffer, labelColor);
-            chartOverlayPane.setEndLine(areaXAxis.getWidth() + xBuffer, areaYAxis.getDisplayPosition(price) + yBuffer
-                    , xBuffer, areaYAxis.getDisplayPosition(price) + yBuffer, lineColor);
-            chartOverlayPane.setEndCircle(areaXAxis.getDisplayPosition(stock.getDate(stock.size() - 1)) + xBuffer
-                    , areaYAxis.getDisplayPosition(price) + yBuffer, circleColor);
-        });
-
+        // Set behavior.
+        size.addListener((observableValue, number, t1) -> formatChart());
         areaChart.setOnMouseEntered(MouseEvent -> {
             chartOverlayPane.showCrossHair();
             cursorInfoPane.setVisible(true);
         });
-
         areaChart.setOnMouseMoved((MouseEvent event) -> {
-            String date = areaXAxis.getValueForDisplay(event.getX() - plotArea.getLayoutX());
-
+            String date = areaXAxis.getValueForDisplay(event.getX() - areaChart.lookup(".chart-plot-background").getLayoutX());
             if (date == null)
                 return;
-
-            if (!date.equals(chartOverlayPane.getY())) {
-                double xBuffer = plotArea.getLayoutX() * 1.5;
-                double yBuffer = plotArea.getLayoutY() * 1.5;
-                int index = stock.getIndexOfDate(date);
-                double price = stock.getClose(index);
-
-                cursorInfoPane.setLabels(stock.getOpen(index), stock.getHigh(index), stock.getLow(index), price
-                        , stock.getChange(stock.getClose(index), size.get()), stock.getVolume(index));
-
-                chartOverlayPane.setXLabel(date, areaXAxis.getDisplayPosition(date) + xBuffer
-                        , areaYAxis.getDisplayPosition(areaYAxis.getLowerBound()) + yBuffer);
-                chartOverlayPane.setYLabel(String.format("%.2f", price), areaXAxis.getWidth() + xBuffer
-                        , areaYAxis.getDisplayPosition(price) + yBuffer);
-                chartOverlayPane.setVerticalLine(areaXAxis.getDisplayPosition(date) + xBuffer
-                        , areaYAxis.getDisplayPosition(areaYAxis.getLowerBound()) + yBuffer
-                        , areaXAxis.getDisplayPosition(date) + xBuffer
-                        , areaYAxis.getDisplayPosition(areaYAxis.getUpperBound()) + yBuffer);
-                chartOverlayPane.setHorizontalLine(areaXAxis.getWidth() + xBuffer
-                        , areaYAxis.getDisplayPosition(price) + yBuffer, xBuffer
-                        , areaYAxis.getDisplayPosition(price) + yBuffer);
-            }
+            if (!date.equals(chartOverlayPane.getY()))
+                formatCursor(date);
         });
-
         areaChart.setOnMouseExited(MouseEvent -> {
             chartOverlayPane.hideCrossHair();
             cursorInfoPane.setVisible(false);
         });
 
-        // Format charts.
-        areaChart.getData().addAll(areaSeries, trendLineSeries);
+        // Add default styling.
+        areaChart.getStyleClass().add("area-chart");
+        stackedBarChart.getStyleClass().add("stacked-bar-chart");
         areaChart.setAnimated(false);
-        areaChart.setLegendVisible(false);
-        areaChart.setCreateSymbols(false);
-        areaChart.setPrefSize(1200, 800);
-        stackedBarChart.getData().add(barSeries);
-        stackedBarChart.setVisible(false);
         stackedBarChart.setAnimated(false);
-        stackedBarChart.setLegendVisible(false);
-        stackedBarChart.setCategoryGap(0);
-        stackedBarChart.setPrefSize(1200, 800);
+        stackedBarChart.setVisible(false);
 
-        // Format axis.
         areaXAxis.setLabel("Date");
         areaYAxis.setLabel("Close");
-        areaYAxis.setSide(Side.RIGHT);
-        areaYAxis.setMinorTickVisible(false);
         barXAxis.setLabel("Date");
         barYAxis.setLabel("Close");
-        barXAxis.setStyle("-fx-tick-label-fill: transparent");
-        barYAxis.setStyle("-fx-tick-label-fill: transparent");
-        barYAxis.setSide(Side.RIGHT);
-        barYAxis.setMinorTickVisible(false);
+        areaYAxis.getStyleClass().add("area-y-axis");
+        barXAxis.getStyleClass().add("bar-x-axis");
+        barYAxis.getStyleClass().add("bar-y-axis");
+        areaXAxis.setAutoRanging(false);
+        areaYAxis.setAutoRanging(false);
+        barXAxis.setAutoRanging(false);
+        barYAxis.setAutoRanging(false);
 
-        // Format panes.
+        getStyleClass().add("chart-pane");
         chartPane.setAlignment(Pos.TOP_LEFT);
         cursorInfoPane.setMouseTransparent(true);
         stackedBarChart.setMouseTransparent(true);
         chartOverlayPane.setMouseTransparent(true);
 
-        setPadding(new Insets(10, 10, 10, 10));
-        setSpacing(10);
-
-        // Add objects to panes.
+        // Add objects.
+        areaChart.getData().addAll(areaSeries, trendLineSeries);
+        stackedBarChart.getData().add(barSeries);
         chartPane.getChildren().addAll(areaChart, stackedBarChart, cursorInfoPane, chartOverlayPane);
         getChildren().addAll(chartPane, stockInfoPane);
 
         // Add stylesheet.
-        getStylesheets().add(Main.class.getResource("css/chart_style.css").toExternalForm());
+        getStylesheets().add(getClass().getResource("/com/lrogerscs/marketlynx/css/chart_style.css").toExternalForm());
     }
 
     /**
@@ -261,7 +179,7 @@ public class StockChartPane extends VBox {
 
         // Build new series of points.
         areaSeries.getData().clear();
-        for(int i = 0; i < stock.size(); i++)
+        for (int i = 0; i < stock.size(); i++)
             areaSeries.getData().add(new XYChart.Data(stock.getDate(i), stock.getClose(i)));
 
         // Reset size and draw new graph.
@@ -302,57 +220,19 @@ public class StockChartPane extends VBox {
                 min = stock.getClose(stock.size() - units + i);
         }
 
-        // Modify x axis.
-        areaXAxis.setAutoRanging(false);
         areaXAxis.setCategories(FXCollections.observableArrayList(validDates));
         areaXAxis.invalidateRange(validDates);
-        barXAxis.setAutoRanging(false);
         barXAxis.setCategories(FXCollections.observableArrayList(validDates));
         barXAxis.invalidateRange(validDates);
 
-        // Modify y axis bounds and tick intervals.
-        double estAxisDiff = 1.1 * max - 0.9 * min;
-        int exp = estAxisDiff > 0 ? (int) Math.log10(estAxisDiff) : 0;
-        double tickInterval = Math.ceil(estAxisDiff / Math.pow(10, exp - 1) / 25) * 25 * Math.pow(10, exp - 2);
-
-        areaYAxis.setAutoRanging(false);
-        areaYAxis.setUpperBound(Math.ceil((1.1 * max) / tickInterval) * tickInterval);
-        areaYAxis.setLowerBound(Math.floor((0.9 * min) / tickInterval) * tickInterval);
-        areaYAxis.setTickUnit(tickInterval);
-        barYAxis.setAutoRanging(false);
-        barYAxis.setUpperBound(areaYAxis.getUpperBound());
-        barYAxis.setLowerBound(areaYAxis.getLowerBound());
-        barYAxis.setTickUnit(tickInterval);
-
-        // Format chart after all variables and data points have been calculated.
-        if (stock.getClose(stock.size() - units) < stock.getClose(stock.size() - 1)) {
-            areaSeries.getNode().lookup(".chart-series-area-line")
-                    .setStyle("-fx-stroke: #55f67e; -fx-stroke-width: 3");
-            areaSeries.getNode().lookup(".chart-series-area-fill")
-                    .setStyle("-fx-fill: linear-gradient(to top, transparent " + (areaYAxis.getLowerBound() / max * 100)
-                            + "%, rgba(85, 246, 126, .3));");
-        } else if (stock.getClose(stock.size() - units) > stock.getClose(stock.size() - 1)) {
-            areaSeries.getNode().lookup(".chart-series-area-line")
-                    .setStyle("-fx-stroke: #f20d46; -fx-stroke-width: 3");
-            areaSeries.getNode().lookup(".chart-series-area-fill")
-                    .setStyle("-fx-fill: linear-gradient(to top, transparent " + (areaYAxis.getLowerBound() / max * 100)
-                            + "%, rgba(231, 13, 68, .3));");
-        } else {
-            areaSeries.getNode().lookup(".chart-series-area-line")
-                    .setStyle("-fx-stroke: rgba(92, 87, 89, .95); -fx-stroke-width: 3");
-            areaSeries.getNode().lookup(".chart-series-area-fill")
-                    .setStyle("-fx-fill: linear-gradient(to top, transparent " + (areaYAxis.getLowerBound() / max * 100)
-                            + "%, rgba(92, 87, 89, .3));");
-        }
-
-        // Set label texts.
-        stockInfoPane.setLabels(stock.getDate(stock.size() - units), stock.getDate(stock.size() - 1)
-                , stock.getAverage(units), max, min, stock.getVolatility(units)
-                , stock.getChange(stock.getClose(stock.size() - 1), units));
-
-        // Force refresh areaChart layout and set size.
+        // Format new axis, force refresh areaChart layout, and set size.
+        formatAxis();
         areaChart.layout();
         size.set(units);
+
+        // Set label texts.
+        stockInfoPane.setLabels(stock.getDate(stock.size() - units), stock.getDate(stock.size() - 1), stock.getAverage(units)
+                , max, min, stock.getVolatility(units), stock.getChange(stock.getClose(stock.size() - 1), units));
 
         // Load volume or trend line if necessary.
         if (volumeShown == true)
@@ -362,21 +242,100 @@ public class StockChartPane extends VBox {
     }
 
     /**
-     * Calculates and displays a trend line according to currently displayed data.
+     * Formats axis bounds and tick intervals according to new max/min.
+     */
+    private void formatAxis() {
+        double diff = 1.1 * max - 0.9 * min;
+        int exp = diff > 0 ? (int) Math.log10(diff) : 0;
+        double interval = Math.ceil(diff / Math.pow(10, exp - 1) / 25) * 25 * Math.pow(10, exp - 2);
+
+        areaYAxis.setUpperBound(Math.ceil((1.1 * max) / interval) * interval);
+        areaYAxis.setLowerBound(Math.floor((0.9 * min) / interval) * interval);
+        barYAxis.setUpperBound(areaYAxis.getUpperBound());
+        barYAxis.setLowerBound(areaYAxis.getLowerBound());
+        areaYAxis.setTickUnit(interval);
+        barYAxis.setTickUnit(interval);
+    }
+
+    /**
+     * Dynamically sets styling for current chart.
+     */
+    private void formatChart() {
+        if (size.get() < 1)
+            return;
+
+        Node plotArea = areaChart.lookup(".chart-plot-background");
+        double xBuffer = plotArea.getLayoutX() * 1.5;
+        double yBuffer = plotArea.getLayoutY() * 1.5;
+        double price = stock.getClose(stock.size() - 1);
+        String labelColor, lineColor, circleColor;
+
+        if (stock.getClose(stock.size() - size.get()) < stock.getClose(stock.size() - 1)) {
+            labelColor = "-fx-background-color: radial-gradient(center 0% 50% , radius 100% , #55f67e, #9efab5)";
+            lineColor = "-fx-stroke: #9efab5";
+            circleColor = "-fx-fill: #55f67e";
+            areaSeries.getNode().lookup(".chart-series-area-line").setStyle("-fx-stroke: #55f67e; -fx-stroke-width: 3");
+            areaSeries.getNode().lookup(".chart-series-area-fill").setStyle("-fx-fill: linear-gradient(to top, transparent "
+                    + (areaYAxis.getLowerBound() / max * 100) + "%, rgba(85, 246, 126, .3));");
+        } else if (stock.getClose(stock.size() - size.get()) > stock.getClose(stock.size() - 1)) {
+            labelColor = "-fx-background-color: radial-gradient(center 0% 50% , radius 100% , #e70d2e, #f43e59)";
+            lineColor = "-fx-stroke: #f43e59";
+            circleColor = "-fx-fill: #e70d2e";
+            areaSeries.getNode().lookup(".chart-series-area-line").setStyle("-fx-stroke: #f20d46; -fx-stroke-width: 3");
+            areaSeries.getNode().lookup(".chart-series-area-fill").setStyle("-fx-fill: linear-gradient(to top, transparent "
+                    + (areaYAxis.getLowerBound() / max * 100) + "%, rgba(231, 13, 68, .3));");
+        } else {
+            labelColor = "-fx-background-color: radial-gradient(center 0% 50% , radius 100% , #808080, #a6a6a6)";
+            lineColor = "-fx-stroke: #a6a6a6";
+            circleColor = "-fx-fill: #808080";
+            areaSeries.getNode().lookup(".chart-series-area-line").setStyle("-fx-stroke: rgba(92, 87, 89, .95); -fx-stroke-width: 3");
+            areaSeries.getNode().lookup(".chart-series-area-fill").setStyle("-fx-fill: linear-gradient(to top, transparent "
+                    + (areaYAxis.getLowerBound() / max * 100) + "%, rgba(92, 87, 89, .3));");
+        }
+
+        chartOverlayPane.setEndLabel(String.format("%.2f", price), areaXAxis.getWidth() + xBuffer
+                , areaYAxis.getDisplayPosition(price) + yBuffer, labelColor);
+        chartOverlayPane.setEndLine(areaXAxis.getWidth() + xBuffer, areaYAxis.getDisplayPosition(price) + yBuffer
+                , xBuffer, areaYAxis.getDisplayPosition(price) + yBuffer, lineColor);
+        chartOverlayPane.setEndCircle(areaXAxis.getDisplayPosition(stock.getDate(stock.size() - 1)) + xBuffer
+                , areaYAxis.getDisplayPosition(price) + yBuffer, circleColor);
+    }
+
+    /**
+     * Sets cursor elements (cross hair, info pane, etc.) given date cursor is hovering over.
+     * @param date Cursor date.
+     */
+    private void formatCursor(String date) {
+        Node plotArea = areaChart.lookup(".chart-plot-background");
+        double xBuffer = plotArea.getLayoutX() * 1.5;
+        double yBuffer = plotArea.getLayoutY() * 1.5;
+        int index = stock.getIndexOfDate(date);
+        double price = stock.getClose(index);
+
+        cursorInfoPane.setLabels(stock.getOpen(index), stock.getHigh(index), stock.getLow(index), price
+                , stock.getChange(stock.getClose(index), size.get()), stock.getVolume(index));
+        chartOverlayPane.setXLabel(date, areaXAxis.getDisplayPosition(date) + xBuffer
+                , areaYAxis.getDisplayPosition(areaYAxis.getLowerBound()) + yBuffer);
+        chartOverlayPane.setYLabel(String.format("%.2f", price), areaXAxis.getWidth() + xBuffer
+                , areaYAxis.getDisplayPosition(price) + yBuffer);
+        chartOverlayPane.setVerticalLine(areaXAxis.getDisplayPosition(date) + xBuffer
+                , areaYAxis.getDisplayPosition(areaYAxis.getLowerBound()) + yBuffer
+                , areaXAxis.getDisplayPosition(date) + xBuffer
+                , areaYAxis.getDisplayPosition(areaYAxis.getUpperBound()) + yBuffer);
+        chartOverlayPane.setHorizontalLine(areaXAxis.getWidth() + xBuffer
+                , areaYAxis.getDisplayPosition(price) + yBuffer, xBuffer
+                , areaYAxis.getDisplayPosition(price) + yBuffer);
+    }
+
+    /**
+     * Displays a trend line according to currently displayed data.
      */
     private void drawTrendLine() {
-        double a;
-        double b;
-        double middle;
-        double sumY = 0.0;
-        double sumXY = 0.0;
-        double sumXSquared = 0.0;
-
-        if (size.get() < 2)
-            return;
+        double a, b, middle, sumY, sumXY, sumXSquared;
 
         trendLineSeries.getData().clear();
 
+        sumY = sumXY = sumXSquared = 0.0;
         middle = size.get() % 2 == 0 ? (double) ((size.get() / 2 + 1) + size.get() / 2) / 2 : size.get() / 2 + 1;
 
         for (int i = 1; i <= size.get(); i++) {
@@ -390,25 +349,16 @@ public class StockChartPane extends VBox {
 
         trendLineSeries.getData().add(new XYChart.Data(stock.getDate(stock.size() - size.get()), a + b * (1 - middle)));
         trendLineSeries.getData().add(new XYChart.Data(stock.getDate(stock.size() - 1), a + b * (size.get() - middle)));
-
-        trendLineSeries.getNode().lookup(".chart-series-area-line")
-                .setStyle("-fx-stroke: #3d99f5; -fx-stroke-width: 1.5");
-        trendLineSeries.getNode().lookup(".chart-series-area-fill").setStyle("-fx-fill: transparent");
     }
 
     /**
-     * Retrieves and displays stock volumes according to currently displayed data.
+     * Displays stock volumes according to currently displayed data.
      */
     private void drawVolume() {
         XYChart.Data dataPoint;
-
-        if (size.get() < 1)
-            return;
-
-        // Clear class attributes.
-        barSeries.getData().clear();
-
         long maxVolume = stock.getMaxVolume(size.get());
+
+        barSeries.getData().clear();
 
         // Build the first volume bar.
         dataPoint = new XYChart.Data(stock.getDate(stock.size() - size.get())

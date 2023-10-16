@@ -3,6 +3,11 @@
     src: url("../font/HammersmithOne-Regular.ttf");
 }
 
+.chart-pane {
+    -fx-padding: 10;
+    -fx-spacing: 10;
+}
+
 .label {
     -fx-font-family: "Hammersmith One";
     -fx-font-size: 12;
@@ -10,6 +15,27 @@
     -fx-text-fill: #f9f5fc;
     -fx-pref-width: 150;
     -fx-max-width: 300;
+}
+
+.area-chart {
+   -fx-legend-visible: false;
+   -fx-create-symbols: false;
+   -fx-pref-width: 1200;
+   -fx-pref-height: 800;
+}
+
+.stacked-bar-chart {
+   -fx-legend-visible: false;
+   -fx-create-symbols: false;
+   -fx-category-gap: 0;
+   -fx-pref-width: 1200;
+   -fx-pref-height: 800;
+}
+
+.scatter-chart {
+   -fx-legend-visible: false;
+   -fx-pref-width: 1200;
+   -fx-pref-height: 800;
 }
 
 .chart-plot-background {
@@ -57,10 +83,42 @@
     -fx-text-fill: #f9f5fc;
 }
 
+.area-y-axis {
+    -fx-side: right;
+    -fx-minor-tick-visible: false;
+}
+
+.bar-x-axis {
+    -fx-tick-label-fill: transparent;
+}
+
+.bar-y-axis {
+    -fx-side: right;
+    -fx-minor-tick-visible: false;
+    -fx-tick-label-fill: transparent;
+}
+
+.scatter-x-axis {
+    -fx-minor-tick-visible: false;
+}
+
+.scatter-y-axis {
+    -fx-side: right;
+    -fx-minor-tick-visible: false;
+}
+
 .line {
     -fx-stroke: #f9f5fc;
     -fx-stroke-width: 1;
     -fx-stroke-dash-array: 4;
+}
+
+.chart-series-area-line {
+    -fx-stroke: #3d99f5; -fx-stroke-width: 1.5;
+}
+
+.chart-series-area-fill {
+    -fx-fill: transparent;
 }
 
 .default-color0.chart-symbol {

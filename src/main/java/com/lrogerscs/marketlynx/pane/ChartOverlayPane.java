@@ -11,26 +11,18 @@ import javafx.scene.shape.Line;
  * @author Lee Rogers
  */
 public class ChartOverlayPane extends Pane {
-    private Label xLabel;
-    private Label yLabel;
-    private Line horizontalLine;
-    private Line verticalLine;
-    private Label endLabel;
-    private Line endLine;
-    private Circle endCircle;
+    private Label xLabel = new Label();
+    private Label yLabel = new Label();
+    private Line horizontalLine = new Line();
+    private Line verticalLine = new Line();
+    private Label endLabel = new Label();
+    private Line endLine = new Line();
+    private Circle endCircle = new Circle(5);
 
     /**
      * Default constructor. Initializes variables.
      */
     public ChartOverlayPane() {
-        xLabel = new Label();
-        yLabel = new Label();
-        horizontalLine = new Line();
-        verticalLine = new Line();
-        endLabel = new Label();
-        endLine = new Line();
-        endCircle = new Circle(5);
-
         xLabel.getStyleClass().add("cursor-tick-label");
         yLabel.getStyleClass().add("cursor-tick-label");
         endLabel.getStyleClass().add("final-price-label");

@@ -9,28 +9,14 @@ import java.util.List;
  * @author Lee Rogers
  */
 public class Stock {
-    private String name;
-    private String interval;
-    private ArrayList<String> dates;
-    private ArrayList<Double> opens;
-    private ArrayList<Double> highs;
-    private ArrayList<Double> lows;
-    private ArrayList<Double> closes;
-    private ArrayList<Long> volumes;
-
-    /**
-     * Default constructor. Initializes variables.
-     */
-    public Stock() {
-        name = "";
-        interval = "";
-        dates = new ArrayList();
-        opens = new ArrayList();
-        highs = new ArrayList();
-        lows = new ArrayList();
-        closes = new ArrayList();
-        volumes = new ArrayList();
-    }
+    private String name = "";
+    private String interval = "";
+    private ArrayList<String> dates = new ArrayList();
+    private ArrayList<Double> opens = new ArrayList();
+    private ArrayList<Double> highs = new ArrayList();
+    private ArrayList<Double> lows = new ArrayList();
+    private ArrayList<Double> closes = new ArrayList();
+    private ArrayList<Long> volumes = new ArrayList();
 
     /**
      * Retrieves the size (number of data points).

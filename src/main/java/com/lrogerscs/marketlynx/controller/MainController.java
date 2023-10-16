@@ -1,10 +1,11 @@
 package com.lrogerscs.marketlynx.controller;
 
-import com.lrogerscs.marketlynx.*;
 import com.lrogerscs.marketlynx.downloader.StockFileDownloader;
+import com.lrogerscs.marketlynx.reader.DownloadReader;
 import com.lrogerscs.marketlynx.reader.StockFileReader;
 import com.lrogerscs.marketlynx.pane.CorrelationChartPane;
 import com.lrogerscs.marketlynx.pane.StockChartPane;
+import com.lrogerscs.marketlynx.writer.DownloadWriter;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,11 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.VBox;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -44,23 +41,30 @@ public class MainController implements Initializable {
     @FXML
     private ToggleButton correlationViewToggleButton;
 
-    private StockChartPane stockChartPane;
-    private CorrelationChartPane correlationChartPane;
-    private StockFileDownloader stockFileDownloader;
-    private StockFileReader stockFileReader;
+    private StockChartPane stockChartPane = new StockChartPane();
+    private CorrelationChartPane correlationChartPane = new CorrelationChartPane();
+    private StockFileDownloader stockFileDownloader = new StockFileDownloader();
+    private StockFileReader stockFileReader = new StockFileReader();
+    private DownloadReader downloadReader = new DownloadReader();
+    private DownloadWriter downloadWriter = new DownloadWriter();
 
     @FXML
     protected void onDownloadButtonClick() {
         String ticker = tickerTextField.getText();
         long period1 = LocalDateTime.of(1970, 1, 1, 23, 59).toEpochSecond(ZoneOffset.UTC);
         long period2 = LocalDateTime.now().minusDays(1).toEpochSecond(ZoneOffset.UTC);
-        String interval = convertInterval();
+        String interval = "1mo";
+
+        if (intervalComboBox.getValue().equals("Daily"))
+            interval = "1d";
+        else if (intervalComboBox.getValue().equals("Weekly"))
+            interval = "1wk";
 
         stockFileDownloader.downloadFile("https://query1.finance.yahoo.com/v7/finance/download/" + ticker
                 + "?period1=" + period1 + "&period2=" + period2 + "&interval=" + interval
-                + "&events=history&includeAdjustedClose=true", "data/graph_data.csv");
-        set(ticker, interval, stockFileReader.readFile("data/graph_data.csv"));
-        write(ticker, (String) intervalComboBox.getValue(), "data/graph_info.txt");
+                + "&events=history&includeAdjustedClose=true", "./graph/graph_data.csv");
+        set(ticker, interval, stockFileReader.readFile("./graph/graph_data.csv"));
+        downloadWriter.write(ticker, (String) intervalComboBox.getValue(), "./graph/graph_info.txt");
     }
 
     @FXML
@@ -111,23 +115,13 @@ public class MainController implements Initializable {
     }
 
     public void setDefault() {
-        String ticker = "";
-        String interval = "";
-
-        // Retrieve graph info.
-        try {
-            List<String> lines = Files.readAllLines(Paths.get(Main.class.getResource("data/graph_info.txt").toString().substring(6)));
-            ticker = lines.get(0);
-            interval = lines.get(1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        List<String> graphInfo = downloadReader.read("./graph/graph_info.txt");
 
         // Set default ticker, combo box, stock values.
-        tickerTextField.setText(ticker);
+        tickerTextField.setText(graphInfo.get(0));
         intervalComboBox.setItems(FXCollections.observableArrayList("Daily", "Weekly", "Monthly"));
-        intervalComboBox.getSelectionModel().select(interval);
-        set(ticker, interval, stockFileReader.readFile("data/graph_data.csv"));
+        intervalComboBox.getSelectionModel().select(graphInfo.get(1));
+        set(graphInfo.get(0), graphInfo.get(1), stockFileReader.readFile("./graph/graph_data.csv"));
     }
 
     private void draw(int size, int units) {
@@ -137,31 +131,8 @@ public class MainController implements Initializable {
             correlationChartPane.draw(size + units);
     }
 
-    private String convertInterval() {
-        if (intervalComboBox.getValue().equals("Daily"))
-            return "1d";
-        else if (intervalComboBox.getValue().equals("Weekly"))
-            return "1wk";
-        return "1mo";
-    }
-
-    private void write(String ticker, String interval, String localFile) {
-        try {
-            FileOutputStream stream = new FileOutputStream(Main.class.getResource(localFile).getFile());
-            stream.write((ticker + "\n" + interval).getBytes());
-            stream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        stockFileReader = new StockFileReader();
-        stockFileDownloader = new StockFileDownloader();
-        stockChartPane = new StockChartPane();
-        correlationChartPane = new CorrelationChartPane();
-
         pane.getChildren().add(stockChartPane);
 
         // Set scrolling behavior.

@@ -1,7 +1,5 @@
 package com.lrogerscs.marketlynx.reader;
 
-import com.lrogerscs.marketlynx.Main;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -16,10 +14,10 @@ import java.util.List;
 public class StockFileReader {
     /**
      * readFile returns an array of ArrayLists containing requested stock data.
-     * @param localFile Local file to read from.
+     * @param localFilePath Local file path to read from.
      * @return array of ArrayLists.
      */
-    public ArrayList[] readFile(String localFile) {
+    public ArrayList[] readFile(String localFilePath) {
         ArrayList[] stockData = new ArrayList[6];
 
         // Initialize array of ArrayLists.
@@ -32,7 +30,7 @@ public class StockFileReader {
         stockData[5] = new ArrayList<Long>();
 
         try {
-            List<String> lines = Files.readAllLines(Paths.get(Main.class.getResource(localFile).toString().substring(6)));
+            List<String> lines = Files.readAllLines(Paths.get(localFilePath));
             String[] data;
             int start = lines.size() > 500 ? lines.size() - 500 : 1;
 

@@ -14,24 +14,17 @@ import java.util.Locale;
  * @author Lee Rogers
  */
 public class CursorInfoPane extends VBox {
-    private Label open;
-    private Label high;
-    private Label low;
-    private Label close;
-    private Label change;
-    private Label volume;
+    private Label open = new Label();
+    private Label high = new Label();
+    private Label low = new Label();
+    private Label close = new Label();
+    private Label change = new Label();
+    private Label volume = new Label();
 
     /**
      * Default constructor. Initializes variables.
      */
     public CursorInfoPane() {
-        open = new Label();
-        high = new Label();
-        low = new Label();
-        close = new Label();
-        change = new Label();
-        volume = new Label();
-
         setAlignment(Pos.TOP_LEFT);
         setPadding(new Insets(10, 10, 10, 10));
         setSpacing(10);

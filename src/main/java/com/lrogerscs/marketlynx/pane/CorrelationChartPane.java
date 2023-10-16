@@ -1,10 +1,7 @@
 package com.lrogerscs.marketlynx.pane;
 
-import com.lrogerscs.marketlynx.Main;
 import com.lrogerscs.marketlynx.stock.Stock;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Side;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
@@ -20,52 +17,43 @@ import java.util.ArrayList;
  * @author Lee Rogers
  */
 public class CorrelationChartPane extends VBox {
-    private Stock stock;
-    private NumberAxis x;
-    private NumberAxis y;
-    private int size;
-    private ScatterChart scatterChart;
-    private HBox bottomPane;
-    private Label correlation;
-    private Label points;
+    private NumberAxis x = new NumberAxis();
+    private NumberAxis y = new NumberAxis();
+    private ScatterChart scatterChart = new ScatterChart(x, y);
+    private HBox bottomPane = new HBox();
+    private Label correlation = new Label();
+    private Label points = new Label();
+    private Stock stock = new Stock();
+    private double xMax = Double.MIN_VALUE;
+    private double xMin = Double.MAX_VALUE;
+    private double yMax = Double.MIN_VALUE;
+    private double yMin = Double.MAX_VALUE;
+    private int size = 0;
 
     /**
      * Default constructor. Initializes variables.
      */
     public CorrelationChartPane() {
-        // Initialize class variables.
-        stock = new Stock();
-        x = new NumberAxis();
-        y = new NumberAxis();
-        size = 0;
-        scatterChart = new ScatterChart(x, y);
-        bottomPane = new HBox();
-        correlation = new Label();
-        points = new Label();
-
-        // Format axis.
+        // Add default styling.
         x.setLabel("y(t)");
-        x.setMinorTickVisible(false);
         y.setLabel("y(t + 1)");
-        y.setSide(Side.RIGHT);
-        y.setMinorTickVisible(false);
+        x.getStyleClass().add("scatter-x-axis");
+        y.getStyleClass().add("scatter-y-axis");
+        x.setAutoRanging(false);
+        y.setAutoRanging(false);
 
-        // Format chart.
+        scatterChart.getStyleClass().add("scatter-chart");
         scatterChart.setAnimated(false);
-        scatterChart.setLegendVisible(false);
-        scatterChart.setPrefSize(1200, 800);
 
-        // Format panes.
         bottomPane.setAlignment(Pos.CENTER);
-        setPadding(new Insets(10, 10, 10, 10));
-        setSpacing(10);
+        getStyleClass().add("chart-pane");
 
         // Add elements to panes.
         bottomPane.getChildren().addAll(correlation, points);
         getChildren().addAll(scatterChart, bottomPane);
 
         // Add stylesheet.
-        getStylesheets().add(Main.class.getResource("css/chart_style.css").toExternalForm());
+        getStylesheets().add(getClass().getResource("/com/lrogerscs/marketlynx/css/chart_style.css").toExternalForm());
     }
 
     /**
@@ -100,9 +88,6 @@ public class CorrelationChartPane extends VBox {
      */
     public void setStock(String name, String interval, ArrayList[] stockData) {
         stock.setStock(name, interval, stockData);
-
-
-
         draw(100);
     }
 
@@ -125,12 +110,10 @@ public class CorrelationChartPane extends VBox {
         if (size == units || stock.size() < 10)
             return;
 
-        // Initialize local variables, clear class attributes, set size.
+        // Initialize variables, clear class attributes, set size.
         XYChart.Series series = new XYChart.Series();
-        double xMax = Double.MIN_VALUE;
-        double xMin = Double.MAX_VALUE;
-        double yMax = Double.MIN_VALUE;
-        double yMin = Double.MAX_VALUE;
+        xMax = yMax = Double.MIN_VALUE;
+        xMin = yMin = Double.MAX_VALUE;
         scatterChart.getData().clear();
         size = units;
 
@@ -150,24 +133,26 @@ public class CorrelationChartPane extends VBox {
         }
 
         scatterChart.getData().add(series);
-
-        // Modify axis bounds and tick intervals.
-        double estAxisDiff = 1.1 * yMax - 0.9 * yMin;
-        int exp = estAxisDiff > 0 ? (int) Math.log10(estAxisDiff) : 0;
-        double tickInterval = Math.ceil(estAxisDiff / Math.pow(10, exp - 1) / 25) * 25 * Math.pow(10, exp - 2);
-
-        x.setAutoRanging(false);
-        x.setUpperBound(Math.ceil((1.1 * yMax) / tickInterval) * tickInterval);
-        x.setLowerBound(Math.floor((0.9 * yMin) / tickInterval) * tickInterval);
-        x.setTickUnit(tickInterval);
-
-        y.setAutoRanging(false);
-        y.setUpperBound(x.getUpperBound());
-        y.setLowerBound(x.getLowerBound());
-        y.setTickUnit(tickInterval);
+        formatAxis();
 
         // Set labels.
         correlation.setText("Correlation: " + String.format("%.2f", stock.getCorr(size)));
         points.setText("Points Plotted: " + size);
+    }
+
+    /**
+     * Formats axis bounds and tick intervals according to new max/min.
+     */
+    private void formatAxis() {
+        double diff = 1.1 * yMax - 0.9 * yMin;
+        int exp = diff > 0 ? (int) Math.log10(diff) : 0;
+        double interval = Math.ceil(diff / Math.pow(10, exp - 1) / 25) * 25 * Math.pow(10, exp - 2);
+
+        x.setUpperBound(Math.ceil((1.1 * yMax) / interval) * interval);
+        x.setLowerBound(Math.floor((0.9 * yMin) / interval) * interval);
+        y.setUpperBound(x.getUpperBound());
+        y.setLowerBound(x.getLowerBound());
+        x.setTickUnit(interval);
+        y.setTickUnit(interval);
     }
 }
