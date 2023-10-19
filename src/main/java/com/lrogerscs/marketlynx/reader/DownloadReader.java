@@ -8,6 +8,8 @@ import java.util.List;
 
 /**
  * DownloadReader reads last download data (name, interval) and returns a List.
+ *
+ * @author Lee Rogers
  */
 public class DownloadReader {
     /**

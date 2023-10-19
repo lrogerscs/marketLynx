@@ -5,6 +5,8 @@ import java.io.IOException;
 
 /**
  * DownloadWriter writes stock download info (name, interval) to a local file.
+ *
+ * @author Lee Rogers
  */
 public class DownloadWriter {
     /**

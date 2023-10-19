@@ -106,11 +106,6 @@ public class MainController implements Initializable {
         correlationViewToggleButton.setSelected(true);
     }
 
-    private void set(String name, String interval, ArrayList[] stockData) {
-        stockChartPane.setStock(name, interval, stockData);
-        correlationChartPane.setStock(name, interval, stockData);
-    }
-
     public void setDefault() {
         List<String> graphInfo = downloadReader.read("./graph/graph_info.txt");
 
@@ -119,6 +114,11 @@ public class MainController implements Initializable {
         intervalComboBox.setItems(FXCollections.observableArrayList("Daily", "Weekly", "Monthly"));
         intervalComboBox.getSelectionModel().select(graphInfo.get(1));
         set(graphInfo.get(0), graphInfo.get(1), stockFileReader.readFile("./graph/graph_data.csv"));
+    }
+
+    private void set(String name, String interval, ArrayList[] stockData) {
+        stockChartPane.setStock(name, interval, stockData);
+        correlationChartPane.setStock(name, interval, stockData);
     }
 
     private void draw(int size, int units) {
