@@ -9,13 +9,9 @@ import java.util.List;
  * @author Lee Rogers
  */
 public class Stock {
-    private String name = "";
-    private String interval = "";
+    private String name = "", interval = "";
     private ArrayList<String> dates = new ArrayList();
-    private ArrayList<Double> opens = new ArrayList();
-    private ArrayList<Double> highs = new ArrayList();
-    private ArrayList<Double> lows = new ArrayList();
-    private ArrayList<Double> closes = new ArrayList();
+    private ArrayList<Double> opens = new ArrayList(), highs = new ArrayList(), lows = new ArrayList(), closes = new ArrayList();
     private ArrayList<Long> volumes = new ArrayList();
 
     /**

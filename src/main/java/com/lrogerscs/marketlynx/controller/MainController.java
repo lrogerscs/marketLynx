@@ -36,10 +36,7 @@ public class MainController implements Initializable {
     private ComboBox intervalComboBox;
 
     @FXML
-    private ToggleButton stockViewToggleButton;
-
-    @FXML
-    private ToggleButton correlationViewToggleButton;
+    private ToggleButton stockViewToggleButton, correlationViewToggleButton;
 
     private StockChartPane stockChartPane = new StockChartPane();
     private CorrelationChartPane correlationChartPane = new CorrelationChartPane();

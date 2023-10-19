@@ -17,21 +17,16 @@ import java.util.ArrayList;
  * @author Lee Rogers
  */
 public class CorrelationChartPane extends VBox {
-    private NumberAxis x = new NumberAxis();
-    private NumberAxis y = new NumberAxis();
+    private NumberAxis x = new NumberAxis(), y = new NumberAxis();
     private ScatterChart scatterChart = new ScatterChart(x, y);
     private HBox bottomPane = new HBox();
-    private Label correlation = new Label();
-    private Label points = new Label();
+    private Label correlation = new Label(), points = new Label();
     private Stock stock = new Stock();
-    private double xMax = Double.MIN_VALUE;
-    private double xMin = Double.MAX_VALUE;
-    private double yMax = Double.MIN_VALUE;
-    private double yMin = Double.MAX_VALUE;
+    private double xMax = Double.MIN_VALUE, yMax = Double.MIN_VALUE, xMin = Double.MAX_VALUE, yMin = Double.MAX_VALUE;
     private int size = 0;
 
     /**
-     * Default constructor. Initializes variables.
+     * Default constructor. Sets styling, adds children.
      */
     public CorrelationChartPane() {
         // Add default styling.

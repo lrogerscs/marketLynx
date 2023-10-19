@@ -24,12 +24,11 @@ The user may interact with the interface in several ways:
 - To view a specific date's high, open, low, close, etc:
   - Hover over the appropriate data point.
 ### Development Reflection:
-marketLynx is my first true experience using JavaFX to build an application. 
-The application was built over the course of 1-1.5 months worth of learning and testing. 
-Before working on this project, I was only briefly exposed to JavaFX as a framework.
-The extent of my experience was extremely basic, with little knowledge on how to manage panes and other elements. 
-For this project, I also had to learn Maven architecture and CSS styling.
-Due to time and responsibility limitations, I am uploading the project now.
-I will include future improvements to coding styles and possible bugs or issues as they appear.
-### Feedback:
-Open to all constructive feedback one may have.
+marketLynx is my first experience using JavaFX to build an application. 
+The application itself was built over the course of 1-1.5 months worth of learning and testing. 
+Before working on this project, I was only briefly exposed to the JavaFX GUI framework.
+The extent of my experience was extremely basic, with little knowledge in managing panes and other elements. 
+For this project, I additionally learned Maven architecture and CSS styling.
+Due to time and responsibility restrictions, I have uploaded the project now.
+However, I will continue to include improvements to coding styles and possible issues.
+In addition, I plan to increase versatility by adding data forecasting techniques.

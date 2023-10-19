@@ -20,33 +20,28 @@ import java.util.List;
  * @author Lee Rogers
  */
 public class StockChartPane extends VBox {
-    private CategoryAxis areaXAxis = new CategoryAxis();
-    private NumberAxis areaYAxis = new NumberAxis();
-    private CategoryAxis barXAxis = new CategoryAxis();
-    private NumberAxis barYAxis = new NumberAxis();
+    private CategoryAxis areaXAxis = new CategoryAxis(), barXAxis = new CategoryAxis();
+    private NumberAxis areaYAxis = new NumberAxis(), barYAxis = new NumberAxis();
     private AreaChart areaChart = new AreaChart(areaXAxis, areaYAxis);
     private StackedBarChart stackedBarChart = new StackedBarChart(barXAxis, barYAxis);
-    private XYChart.Series areaSeries = new XYChart.Series();
-    private XYChart.Series barSeries = new XYChart.Series();
-    private XYChart.Series trendLineSeries = new XYChart.Series();
+    private XYChart.Series areaSeries = new XYChart.Series(), barSeries = new XYChart.Series(), trendLineSeries = new XYChart.Series();
     private CursorInfoPane cursorInfoPane = new CursorInfoPane();
     private StockInfoPane stockInfoPane = new StockInfoPane();
     private ChartOverlayPane chartOverlayPane = new ChartOverlayPane();
     private Stock stock = new Stock();
     private IntegerProperty size = new SimpleIntegerProperty(0);
-    private double max = Double.MIN_VALUE;
-    private double min = Double.MAX_VALUE;
-    private boolean trendLineShown = false;
-    private boolean volumeShown = false;
+    private double max = Double.MIN_VALUE, min = Double.MAX_VALUE;
+    private boolean trendLineShown = false, volumeShown = false;
 
     /**
-     * Default constructor. Initializes variables and behavior.
+     * Default constructor. Initializes variables, sets behavior, sets styling, adds children.
      */
     public StockChartPane() {
         StackPane chartPane = new StackPane();
 
         // Set behavior.
         size.addListener((observableValue, number, t1) -> formatChart());
+
         areaChart.setOnMouseEntered(MouseEvent -> {
             chartOverlayPane.showCrossHair();
             cursorInfoPane.setVisible(true);
@@ -206,13 +201,12 @@ public class StockChartPane extends VBox {
         if (size.get() == units || stock.size() < 10)
             return;
 
-        // Set local and class variables.
+        // Update local and class variables.
         max = size.get() < units ? max : Double.MIN_VALUE;
         min = size.get() < units ? min : Double.MAX_VALUE;
         List<String> validDates = stock.dates(stock.size() - units, stock.size());
         int end = size.get() < units ? units - size.get() : units;
 
-        // Update max/min.
         for (int i = 0; i < end; i++) {
             if (stock.getClose(stock.size() - units + i) > max)
                 max = stock.getClose(stock.size() - units + i);

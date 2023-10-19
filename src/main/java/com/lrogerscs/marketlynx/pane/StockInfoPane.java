@@ -20,7 +20,7 @@ public class StockInfoPane extends HBox {
     private Label change = new Label("Change: ");
 
     /**
-     * Default constructor. Initializes variables.
+     * Default constructor. Sets styling, adds children.
      */
     public StockInfoPane() {
         setAlignment(Pos.CENTER);
