@@ -31,7 +31,7 @@ Before working on this project, I was only briefly exposed to the JavaFX GUI fra
 Heretofore, I had little knowledge in managing and manipulating dynamic elements within JavaFX;
 also, I was not well-versed in the many opportunities afforded by it.
 
-Additionally, I learned of and about Maven architecture and CSS styling to benefit project structure and visuals.
+Additionally, I learned about Maven architecture and CSS styling to benefit project structure and visuals.
 
 Due to time and responsibility restrictions, I have published the project now.
 However, I will continue to add improvements to coding styles and apparent issues.
